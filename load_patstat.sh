@@ -17,13 +17,15 @@ DB=
 TMPDIR=/dev/shm
 
 function show_help() {
-    echo "Usage: [-v] [-t] -u mysql_user -p mysql_pass -h mysql_host -d mysql_dbname -z patstat_zips_dir -e tmp_dir"
+    echo "Usage: [-v] [-t] -u mysql_user -p mysql_pass -h mysql_host -d mysql_dbname -z patstat_zips_dir -e tmp_dir -m mysql_data_path"
     echo "  -v: be verbose"
     echo "  -t: load small chunks of data for testing purposes"
     echo "  -z: directory containing patstat zipped files shipped in DVDs (defaults to $ZIPFILESPATH)"
     echo "  -o: output and error logs directory (defaults to $LOGPATH)"
     echo "  -e: temp dir to extract the zip files (defaults to $TMPDIR)"
+    echo "  -m: directory of mysql data, used for running myisamchk and myisampack (defaults to $MYSQLDATAPATH)"
 }
+
 
 while getopts "?vto:u:p:d:h:z:m:e:" opt; do
     case "$opt" in
@@ -48,6 +50,8 @@ while getopts "?vto:u:p:d:h:z:m:e:" opt; do
     z)  ZIPFILESPATH=$OPTARG
 	;;
     e)  TMPDIR=$OPTARG
+	;;
+    m)  MYSQLDATAPATH=$OPTARG
 	;;
     esac
 done
