@@ -14,17 +14,18 @@ USER=
 PASS=
 HOST=
 DB=
-
+TMPDIR=/dev/shm
 
 function show_help() {
-    echo "Usage: [-v] [-t] -u mysql_user -p mysql_pass -h mysql_host -d mysql_dbname -z patstat_zips_dir"
+    echo "Usage: [-v] [-t] -u mysql_user -p mysql_pass -h mysql_host -d mysql_dbname -z patstat_zips_dir -e tmp_dir"
     echo "  -v: be verbose"
     echo "  -t: load small chunks of data for testing purposes"
     echo "  -z: directory containing patstat zipped files shipped in DVDs (defaults to $ZIPFILESPATH)"
     echo "  -o: output and error logs directory (defaults to $LOGPATH)"
+    echo "  -e: temp dir to extract the zip files (defaults to $TMPDIR)"
 }
 
-while getopts "?vto:u:p:d:h:z:m:" opt; do
+while getopts "?vto:u:p:d:h:z:m:e:" opt; do
     case "$opt" in
     \?)
         show_help
@@ -46,6 +47,8 @@ while getopts "?vto:u:p:d:h:z:m:" opt; do
 	;;
     z)  ZIPFILESPATH=$OPTARG
 	;;
+    e)  TMPDIR=$OPTARG
+	;;
     esac
 done
 
@@ -54,9 +57,9 @@ shift $((OPTIND-1))
 
 [ "$1" = "--" ] && shift
 
-if [[ -z $USER ]] || [[ -z $PASS ]] || [[ -z $HOST ]] || [[ -z $DB ]] || [[ -z $ZIPFILESPATH ]]
+if [[ -z $USER ]] || [[ -z $PASS ]] || [[ -z $HOST ]] || [[ -z $DB ]] || [[ -z $ZIPFILESPATH ]] || [[ -z $TMPDIR ]]
 then
-     show_help 
+     show_help
      exit 1
 fi
 
@@ -85,7 +88,7 @@ load_table() {
 
 	# This removes all use of indexes for the table.
 	# An option value of 0 disables updates to all indexes, which can be used to get faster inserts.
-	echo TRUNCATE TABLE $1 \; | $SENDSQL 
+	echo TRUNCATE TABLE $1 \; | $SENDSQL
 	echo ALTER TABLE $1 DISABLE KEYS\; | $SENDSQL ;
 
 	myisamchk  --keys-used=0 -rqp $MYSQLDATAPATH/$DB/$1*.MYI
@@ -105,7 +108,7 @@ load_table() {
 
 	# other rows are bugged as well since the cotain a backslash just before some double quote
 	# separating different columns
-	# e.g., 
+	# e.g.,
 	# 8638854,"",4318,"BROTHER KOGYO KABUSHIKI KAISHA\",""
     # ... ,"COMPANY",108638854,"BROTHER KOGYO KABUSHIKI KAISHA\",0
 	# so again we've to fix it using sed. The original sed expr used is:
@@ -118,7 +121,7 @@ load_table() {
 	do
 	    echo loading part file $ZIPPEDFILE
 
-	    UNZIPPEDFILE=/dev/shm/`basename $ZIPPEDFILE`.txt
+	    UNZIPPEDFILE=$TMPDIR/`basename $ZIPPEDFILE`.txt
 
             if [ $DEMO -eq 1 ]
 	    then
@@ -217,7 +220,7 @@ main 2> $LOGPATH/error_log_$tstamp > $LOGPATH/output_log_$tstamp
 
 # check of errors
 errlines=`wc -l $LOGPATH/error_log_$tstamp | cut -d' ' -f1`
-if [ $errlines -gt 0 ] 
+if [ $errlines -gt 0 ]
 then
     if [ $errlines -le 3 ]
     then
