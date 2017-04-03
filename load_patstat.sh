@@ -205,6 +205,7 @@ function main(){
     load_table tls802_legal_event_code
     load_table tls901_techn_field_ipc
     load_table tls902_ipc_nace2
+    load_table tls904_nuts
     load_table tls203_appln_abstr
     load_table tls221_inpadoc_prs
 

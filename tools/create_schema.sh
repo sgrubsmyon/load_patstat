@@ -61,7 +61,7 @@ CREATE TABLE tls202_appln_title (
 CREATE TABLE tls203_appln_abstr (
   appln_id int(11) NOT NULL DEFAULT '0',
   appln_abstract_lg char(2) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  appln_abstract text COLLATE utf8mb4_unicode_ci,
+  appln_abstract text COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY (appln_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci  AVG_ROW_LENGTH=800;
 
@@ -182,7 +182,7 @@ CREATE TABLE tls212_citation (
 CREATE TABLE tls214_npl_publn (
   npl_publn_id int(11) NOT NULL DEFAULT '0',
   npl_type char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  npl_biblio text COLLATE utf8mb4_unicode_ci NOT NULL,
+  npl_biblio text COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY (npl_publn_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci  AVG_ROW_LENGTH=150;
 
@@ -281,9 +281,9 @@ CREATE TABLE tls226_person_orig (
   source char(5) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   source_version varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   name_freeform varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  last_name varchar(400) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  first_name varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  middle_name varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  last_name varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  first_name varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  middle_name varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   address_freeform varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   address_1 varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   address_2 varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
@@ -327,7 +327,7 @@ CREATE TABLE tls228_docdb_fam_citn (
 
 CREATE TABLE tls229_appln_nace2 (
   appln_id int(11) NOT NULL DEFAULT '0',
-  nace2_code char(5) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  nace2_code varchar(5) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   weight float NOT NULL DEFAULT '1',
   PRIMARY KEY (appln_id,nace2_code),
   KEY nace2_code (nace2_code)
@@ -345,8 +345,8 @@ CREATE TABLE tls230_appln_techn_field (
 
 
 CREATE TABLE tls801_country (
-  ctry_code varchar(2) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  iso_alpha3 varchar(3) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  ctry_code char(2) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  iso_alpha3 char(3) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   st3_name varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   state_indicator char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   continent varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
@@ -365,7 +365,7 @@ CREATE TABLE tls802_legal_event_code (
   lec_name varchar(4) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   nat_auth_cc varchar(2) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   nat_lec_name varchar(4) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  impact char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  impact varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   lec_descr varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   lecg_id tinyint(4) NOT NULL DEFAULT '0',
   lecg_name varchar(6) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
@@ -389,19 +389,29 @@ CREATE TABLE tls902_ipc_nace2 (
   ipc varchar(8) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   not_with_ipc varchar(8) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   unless_with_ipc varchar(8) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  nace2_code char(5) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  nace2_weight float NOT NULL DEFAULT '1',
+  nace2_code varchar(5) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  nace2_weight tinyint NOT NULL DEFAULT '1',
   nace2_descr varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY (ipc,not_with_ipc,unless_with_ipc,nace2_code)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ;
 
 
 
+CREATE TABLE tls904_nuts (
+  nuts3 varchar(5) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  nuts3_name varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  PRIMARY KEY (nuts3)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ;
+
+
+
 CREATE TABLE tls906_person (
   person_id int(11) NOT NULL DEFAULT '0',
-  person_name varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
+  person_name varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
   person_address varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL,
   person_ctry_code char(2) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  nuts varchar(5) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  nuts_level tinyint NOT NULL DEFAULT '9',
   doc_std_name_id int(11) NOT NULL DEFAULT '0',
   doc_std_name varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
   psn_id int(11) NOT NULL DEFAULT '0',
