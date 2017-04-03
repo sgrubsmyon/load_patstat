@@ -144,6 +144,7 @@ load_table() {
                LOAD DATA LOCAL INFILE "$UNZIPPEDFILE"
                INTO TABLE $1 FIELDS TERMINATED BY ","
                OPTIONALLY ENCLOSED BY '"'
+               ESCAPED BY ''
                LINES TERMINATED BY '\r\n'
                IGNORE 1 LINES;
                commit;
