@@ -61,7 +61,7 @@ CREATE TABLE tls202_appln_title (
 CREATE TABLE tls203_appln_abstr (
   appln_id int(11) NOT NULL DEFAULT '0',
   appln_abstract_lg char(2) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  appln_abstract text COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  appln_abstract text COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (appln_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci  AVG_ROW_LENGTH=800;
 
@@ -182,7 +182,7 @@ CREATE TABLE tls212_citation (
 CREATE TABLE tls214_npl_publn (
   npl_publn_id int(11) NOT NULL DEFAULT '0',
   npl_type char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  npl_biblio text COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  npl_biblio text COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (npl_publn_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci  AVG_ROW_LENGTH=150;
 
